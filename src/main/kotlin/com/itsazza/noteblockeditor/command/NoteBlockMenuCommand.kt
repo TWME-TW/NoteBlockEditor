@@ -23,7 +23,7 @@ object NoteBlockMenuCommand : CommandExecutor {
 
         val block = sender.getTargetBlockExact(15) ?: return true
 
-        if(!sender.canPlace(block) && sender.hasPermission("noteblockeditor.bypass")) {
+        if(!sender.canPlace(block) && !sender.hasPermission("noteblockeditor.bypass")) {
             sender.sendMessage("§cYou're not allowed to build here!")
             return true
         }

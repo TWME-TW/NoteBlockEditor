@@ -26,7 +26,7 @@ object NoteBlockEventListener: Listener {
         if(!player.hasPermission("noteblockeditor.interact")) return
         val noteBlock = clickedBlock.blockData as? NoteBlock ?: return
 
-        if(!player.canPlace(clickedBlock) && player.hasPermission("noteblockeditor.bypass")) {
+        if(!player.canPlace(clickedBlock) && !player.hasPermission("noteblockeditor.bypass")) {
             player.sendMessage("§cYou're not allowed to build here!")
             return
         }
