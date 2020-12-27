@@ -1,8 +1,0 @@
-main: com.itsazza.noteblockeditor.NoteBlockEditorPlugin
-name: NoteBlockEditor
-version: 1.0.0
-author: ItsAZZA
-api-version: "1.16"
-commands:
-  noteblock:
-    aliases: [noteblocks, nb, noteblockeditor, nbe]
