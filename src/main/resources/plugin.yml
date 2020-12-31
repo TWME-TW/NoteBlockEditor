@@ -1,8 +1,18 @@
 main: com.itsazza.noteblockeditor.NoteBlockEditorPlugin
 name: NoteBlockEditor
-version: 1.0.0
+version: 1.0.1
 author: ItsAZZA
-api-version: "1.16"
+api-version: "1.13"
 commands:
   noteblock:
     aliases: [noteblocks, nb, noteblockeditor, nbe]
+permissions:
+  noteblockeditor.interact:
+    description: "Access to the noteblock editor via interaction"
+  noteblockeditor.command:
+    description: "Access to the noteblock editor via command"
+  noteblockeditor.bypass:
+    description: "Bypass any build restrictions: able to edit noteblocks anywhere"
+  noteblockeditor.instruments:
+    default: true
+    description: "Access to the noteblock editor instrument menu"

@@ -8,7 +8,6 @@ import com.itsazza.noteblockeditor.util.canPlace
 import de.themoep.inventorygui.GuiElementGroup
 import de.themoep.inventorygui.InventoryGui
 import de.themoep.inventorygui.StaticGuiElement
-import org.bukkit.Bukkit
 import org.bukkit.Instrument
 import org.bukkit.Material
 import org.bukkit.Note
@@ -57,6 +56,7 @@ object NoteBlockInstrumentMenu {
             val itemMeta = item.itemMeta
             itemMeta.addEnchant(Enchantment.LOOT_BONUS_MOBS, 1, true)
             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
+            item.itemMeta = itemMeta
         }
 
         return StaticGuiElement('i',

@@ -5,7 +5,6 @@ import de.themoep.inventorygui.*
 import com.itsazza.noteblockeditor.menu.buttons.closeButton
 import com.itsazza.noteblockeditor.menu.instrumentmenu.NoteBlockInstrumentMenu
 import com.itsazza.noteblockeditor.menu.noteBlockMenuTemplate
-import org.bukkit.Bukkit
 import org.bukkit.Instrument
 import org.bukkit.Material
 import org.bukkit.Note
@@ -15,7 +14,6 @@ import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
-import org.bukkit.scheduler.BukkitRunnable
 
 object NoteBlockNoteMenu {
     fun openMenu(player: Player, block: Block, note: Note, instrument: Instrument) {
@@ -37,17 +35,24 @@ object NoteBlockNoteMenu {
         }
 
         gui.addElement(group)
-        gui.addElement(StaticGuiElement('i',
-                ItemStack(Material.BELL),
-                1,
-                {   NoteBlockInstrumentMenu.openMenu(player, block, note, instrument)
-                    return@StaticGuiElement true},
-            "§6§lChange instrument",
-            "§7Open a menu to change the",
-            "§7noteblock's instrument",
-            "§0 ",
-            "§eClick to open"
-        ))
+        if(player.hasPermission("noteblockeditor.instruments")) {
+            gui.addElement(
+                StaticGuiElement(
+                    'i',
+                    ItemStack(Material.BELL),
+                    1,
+                    {
+                        NoteBlockInstrumentMenu.openMenu(player, block, note, instrument)
+                        return@StaticGuiElement true
+                    },
+                    "§6§lChange instrument",
+                    "§7Open a menu to change the",
+                    "§7noteblock's instrument",
+                    "§0 ",
+                    "§eClick to open"
+                )
+            )
+        }
         gui.closeAction = InventoryGui.CloseAction { false }
         gui.addElement(closeButton)
         return gui
