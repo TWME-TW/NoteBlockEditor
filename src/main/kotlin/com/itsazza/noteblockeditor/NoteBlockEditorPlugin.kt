@@ -7,7 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin
 
 class NoteBlockEditorPlugin : JavaPlugin() {
     companion object {
-        var instance: NoteBlockEditorPlugin? = null
+        lateinit var instance: NoteBlockEditorPlugin
             private set
     }
 

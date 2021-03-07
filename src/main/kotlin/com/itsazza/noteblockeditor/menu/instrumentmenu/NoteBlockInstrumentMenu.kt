@@ -34,7 +34,7 @@ object NoteBlockInstrumentMenu {
         val group = GuiElementGroup('n')
 
         for(item in listOfInstruments) {
-            group.addElement(createInstrumentButton(player, block, currentNote, item, currentInstrument))
+            group.addElement(createInstrumentButton(block, currentNote, item, currentInstrument))
         }
 
         gui.addElement(group)
@@ -50,7 +50,7 @@ object NoteBlockInstrumentMenu {
         return gui
     }
 
-    private fun createInstrumentButton(player: Player, block: Block, note: Note, newInstrument: NoteBlockInstrument, currentInstrument: Instrument) : StaticGuiElement {
+    private fun createInstrumentButton(block: Block, note: Note, newInstrument: NoteBlockInstrument, currentInstrument: Instrument) : StaticGuiElement {
         val item = ItemStack(newInstrument.material)
         if(newInstrument.instrument == currentInstrument) {
             val itemMeta = item.itemMeta
@@ -62,6 +62,7 @@ object NoteBlockInstrumentMenu {
         return StaticGuiElement('i',
             item,
             {
+                val player = it.event.whoClicked as Player
                 when {
                     it.event.isLeftClick -> {
                         val blockBelow = block.getRelative(BlockFace.DOWN)

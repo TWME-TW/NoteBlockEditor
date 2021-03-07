@@ -31,7 +31,7 @@ object NoteBlockNoteMenu {
         val group = GuiElementGroup('n')
 
         for(item in listOfNotes) {
-            group.addElement(createNoteBlockButton(block, player, item, instrument, note))
+            group.addElement(createNoteBlockButton(block, item, instrument, note))
         }
 
         gui.addElement(group)
@@ -58,7 +58,7 @@ object NoteBlockNoteMenu {
         return gui
     }
 
-    private fun createNoteBlockButton(block: Block, player: Player, note: NoteBlockNote, instrument: Instrument, currentNote: Note) : StaticGuiElement {
+    private fun createNoteBlockButton(block: Block, note: NoteBlockNote, instrument: Instrument, currentNote: Note) : StaticGuiElement {
         val item = ItemStack(Material.NOTE_BLOCK)
         val itemMeta = item.itemMeta
         if (Note(note.value - 1) == currentNote) {
@@ -72,6 +72,8 @@ object NoteBlockNoteMenu {
             note.value,
             GuiElement.Action {
                 val newNote = Note(note.value - 1)
+                val player = it.event.whoClicked as Player
+
                 when {
                     it.event.isRightClick -> {
                         player.playNote(player.location, instrument, newNote)
