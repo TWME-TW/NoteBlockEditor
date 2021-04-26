@@ -33,8 +33,9 @@ object NoteBlockInstrumentMenu {
 
         val group = GuiElementGroup('n')
 
-        for(item in listOfInstruments) {
-            group.addElement(createInstrumentButton(block, currentNote, item, currentInstrument))
+        val instruments = Instrument.values().sortedBy { it.name }
+        for (instrument in instruments) {
+            group.addElement(createInstrumentButton(block, currentNote, instrument, getInstrumentMaterial(instrument), currentInstrument))
         }
 
         gui.addElement(group)
@@ -50,9 +51,11 @@ object NoteBlockInstrumentMenu {
         return gui
     }
 
-    private fun createInstrumentButton(block: Block, note: Note, newInstrument: NoteBlockInstrument, currentInstrument: Instrument) : StaticGuiElement {
-        val item = ItemStack(newInstrument.material)
-        if(newInstrument.instrument == currentInstrument) {
+    private fun createInstrumentButton(block: Block, note: Note, newInstrument: Instrument, icon: Material, currentInstrument: Instrument) : StaticGuiElement {
+        val item = ItemStack(icon)
+        val instrumentName = newInstrument.name.replace("_", " ").toLowerCase()
+
+        if(newInstrument == currentInstrument) {
             val itemMeta = item.itemMeta
             itemMeta.addEnchant(Enchantment.LOOT_BONUS_MOBS, 1, true)
             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
@@ -71,12 +74,12 @@ object NoteBlockInstrumentMenu {
                             it.gui.destroy()
                             return@StaticGuiElement true
                         }
-                        blockBelow.setType(newInstrument.material, true)
+                        blockBelow.setType(icon, true)
                         it.gui.destroy()
                         return@StaticGuiElement true
                     }
                     it.event.isRightClick -> {
-                        player.playNote(player.location, newInstrument.instrument, note)
+                        player.playNote(player.location, newInstrument, note)
                         return@StaticGuiElement  true
                     }
                     else -> {
@@ -84,9 +87,9 @@ object NoteBlockInstrumentMenu {
                     }
                 }
             },
-            "§6§l${newInstrument.name}",
+            "§6§l${instrumentName.capitalize()}",
             "§7Sets the note block",
-            "§7instrument to ${newInstrument.name.toLowerCase()}",
+            "§7instrument to $instrumentName",
             "§0 ",
             "§e§lL-CLICK §7to set",
             "§e§lR-CLICK §7to preview"

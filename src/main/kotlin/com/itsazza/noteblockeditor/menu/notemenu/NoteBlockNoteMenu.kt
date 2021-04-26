@@ -39,7 +39,7 @@ object NoteBlockNoteMenu {
             gui.addElement(
                 StaticGuiElement(
                     'i',
-                    ItemStack(Material.BELL),
+                    ItemStack(Material.REDSTONE),
                     1,
                     {
                         NoteBlockInstrumentMenu.openMenu(player, block, note, instrument)

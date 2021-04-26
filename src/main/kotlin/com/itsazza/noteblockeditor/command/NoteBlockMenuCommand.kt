@@ -2,7 +2,6 @@ package com.itsazza.noteblockeditor.command
 
 import com.itsazza.noteblockeditor.menu.notemenu.NoteBlockNoteMenu
 import com.itsazza.noteblockeditor.util.canPlace
-import org.bukkit.Material
 import org.bukkit.block.data.type.NoteBlock
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -17,7 +16,7 @@ object NoteBlockMenuCommand : CommandExecutor {
         }
 
         if (!sender.hasPermission("noteblockeditor.command")) {
-            sender.sendMessage("§cInsufficient permissions: noteblockeditor.command")
+            sender.sendMessage("§cInsufficient permission: noteblockeditor.command")
             return true
         }
 
@@ -28,7 +27,7 @@ object NoteBlockMenuCommand : CommandExecutor {
             return true
         }
 
-        if(block.type != Material.NOTE_BLOCK) {
+        if (block.blockData !is NoteBlock) {
             sender.sendMessage("§cYou're not looking at a note block!")
             return true
         }

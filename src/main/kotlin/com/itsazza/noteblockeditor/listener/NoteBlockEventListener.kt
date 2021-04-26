@@ -12,17 +12,17 @@ import org.bukkit.event.player.PlayerInteractEvent
 object NoteBlockEventListener: Listener {
     @EventHandler
     fun onNoteBlockClick(event: PlayerInteractEvent) {
-        val player = event.player
-
         if (event.action != Action.RIGHT_CLICK_BLOCK) return
+
+        val player = event.player
         if (!player.isSneaking) return
         if (player.inventory.itemInMainHand.type != Material.AIR) return
 
         val clickedBlock = event.clickedBlock ?: return
-        if (clickedBlock.type != Material.NOTE_BLOCK) return
+        if (clickedBlock.blockData !is NoteBlock) return
 
         if(!player.hasPermission("noteblockeditor.interact")) return
-        val noteBlock = clickedBlock.blockData as? NoteBlock ?: return
+        val noteBlock = clickedBlock.blockData as NoteBlock
 
         if(!player.canPlace(clickedBlock) && !player.hasPermission("noteblockeditor.bypass")) {
             player.sendMessage("§cYou're not allowed to build here!")
