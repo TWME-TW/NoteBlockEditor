@@ -2,11 +2,11 @@ group 'com.itsazza'
 version '1.0.2'
 
 apply plugin: 'kotlin'
-apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: "com.github.johnrengelman.shadow"
 
 buildscript {
     ext {
-        kotlin_version = '1.4.31'
+        kotlin_version = '1.4.32'
     }
     repositories {
         mavenCentral()
@@ -30,8 +30,9 @@ repositories {
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    compile "de.themoep:inventorygui:1.4.2-SNAPSHOT"
-    compileOnly group: 'com.destroystokyo.paper', name: 'paper-api', version: '1.16.4-R0.1-SNAPSHOT'
+    implementation "de.themoep:inventorygui:1.4.2-SNAPSHOT"
+    implementation 'org.bstats:bstats-bukkit:2.2.1'
+    compileOnly group: 'com.destroystokyo.paper', name: 'paper-api', version: '1.16.5-R0.1-SNAPSHOT'
 }
 
 sourceCompatibility = 1.8
@@ -39,5 +40,7 @@ targetCompatibility = 1.8
 
 shadowJar {
     minimize()
+    relocate('org.bstats', 'com.itsazza.resources.bstats')
+    relocate('de.themoep', 'com.itsazza.resources.themoep')
     archiveName("NoteBlockEditor-${this.version}.jar")
 }
