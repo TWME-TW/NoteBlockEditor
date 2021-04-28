@@ -24,7 +24,7 @@ class NoteBlockEditorPlugin : JavaPlugin() {
         saveDefaultConfig()
         loadInstruments()
         Bukkit.getPluginManager().registerEvents(NoteBlockEventListener, this)
-        Metrics(this, 11008)
+        Metrics(this, 11176)
     }
 
     fun loadInstruments() {
