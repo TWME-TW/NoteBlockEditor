@@ -33,9 +33,9 @@ object NoteBlockInstrumentMenu {
 
         val group = GuiElementGroup('n')
 
-        val instruments = Instrument.values().sortedBy { it.name }
+        val instruments = NoteBlockEditorPlugin.instance.instruments
         for (instrument in instruments) {
-            group.addElement(createInstrumentButton(block, currentNote, instrument, getInstrumentMaterial(instrument), currentInstrument))
+            group.addElement(createInstrumentButton(block, currentNote, instrument.key, instrument.value, currentInstrument))
         }
 
         gui.addElement(group)
@@ -53,7 +53,7 @@ object NoteBlockInstrumentMenu {
 
     private fun createInstrumentButton(block: Block, note: Note, newInstrument: Instrument, icon: Material, currentInstrument: Instrument) : StaticGuiElement {
         val item = ItemStack(icon)
-        val instrumentName = newInstrument.name.replace("_", " ").toLowerCase()
+        val instrumentName = newInstrument.name.split("_").joinToString(" ") { it.toLowerCase().capitalize() }
 
         if(newInstrument == currentInstrument) {
             val itemMeta = item.itemMeta
