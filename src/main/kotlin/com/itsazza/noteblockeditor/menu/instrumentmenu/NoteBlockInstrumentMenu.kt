@@ -92,7 +92,7 @@ object NoteBlockInstrumentMenu {
             "§7instrument to $instrumentName",
             "§0 ",
             "§e§lL-CLICK §7to set",
-            "§e§lR-CLICK §7to preview"
+            "§e§lR-CLICK §7to play preview"
         )
     }
 }
