@@ -9,17 +9,21 @@ import org.bukkit.Material
 import org.bukkit.plugin.java.JavaPlugin
 import java.lang.IllegalArgumentException
 import kotlin.collections.HashMap
+import kotlin.properties.Delegates
 
 class NoteBlockEditorPlugin : JavaPlugin() {
     companion object {
         lateinit var instance: NoteBlockEditorPlugin
             private set
+        var noteBlocksPlusEnabled by Delegates.notNull<Boolean>()
     }
 
     val instruments = HashMap<Instrument, Material>()
 
     override fun onEnable() {
         instance = this
+        noteBlocksPlusEnabled = Bukkit.getPluginManager().isPluginEnabled("NoteBlocksPlus")
+
         getCommand("noteblock")?.setExecutor(NoteBlockMenuCommand)
         saveDefaultConfig()
         loadInstruments()

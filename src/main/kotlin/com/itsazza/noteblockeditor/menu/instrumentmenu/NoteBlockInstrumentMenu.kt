@@ -5,19 +5,17 @@ import com.itsazza.noteblockeditor.menu.buttons.closeButton
 import com.itsazza.noteblockeditor.menu.noteBlockMenuTemplate
 import com.itsazza.noteblockeditor.menu.notemenu.NoteBlockNoteMenu
 import com.itsazza.noteblockeditor.util.canPlace
+import com.itsazza.noteblocksplus.api.NoteBlocksPlusAPI
 import de.themoep.inventorygui.GuiElementGroup
 import de.themoep.inventorygui.InventoryGui
 import de.themoep.inventorygui.StaticGuiElement
-import org.bukkit.Instrument
-import org.bukkit.Material
-import org.bukkit.Note
+import org.bukkit.*
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
-import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 
+@Suppress("DEPRECATION")
 object NoteBlockInstrumentMenu {
     fun openMenu(player: Player, block: Block, currentNote: Note, currentInstrument: Instrument) {
         createMenu(player, block, currentNote, currentInstrument).show(player)
@@ -35,7 +33,13 @@ object NoteBlockInstrumentMenu {
 
         val instruments = NoteBlockEditorPlugin.instance.instruments
         for (instrument in instruments) {
-            group.addElement(createInstrumentButton(block, currentNote, instrument.key, instrument.value, currentInstrument))
+            group.addElement(createInstrumentButton(block, currentNote, instrument.key, instrument.value))
+        }
+
+        if (NoteBlockEditorPlugin.noteBlocksPlusEnabled) {
+            NoteBlocksPlusAPI.getSounds().forEach {
+                group.addElement(createNoteBlocksPlusInstrumentButton(block, currentNote, it.value, it.key))
+            }
         }
 
         gui.addElement(group)
@@ -51,16 +55,9 @@ object NoteBlockInstrumentMenu {
         return gui
     }
 
-    private fun createInstrumentButton(block: Block, note: Note, newInstrument: Instrument, icon: Material, currentInstrument: Instrument) : StaticGuiElement {
+    private fun createInstrumentButton(block: Block, note: Note, newInstrument: Instrument, icon: Material) : StaticGuiElement {
         val item = ItemStack(icon)
         val instrumentName = newInstrument.name.split("_").joinToString(" ") { it.toLowerCase().capitalize() }
-
-        if(newInstrument == currentInstrument) {
-            val itemMeta = item.itemMeta
-            itemMeta.addEnchant(Enchantment.LOOT_BONUS_MOBS, 1, true)
-            itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
-            item.itemMeta = itemMeta
-        }
 
         return StaticGuiElement('i',
             item,
@@ -68,13 +65,11 @@ object NoteBlockInstrumentMenu {
                 val player = it.event.whoClicked as Player
                 when {
                     it.event.isLeftClick -> {
-                        val blockBelow = block.getRelative(BlockFace.DOWN)
-                        if(!player.canPlace(blockBelow)) {
-                            player.sendMessage("§cYou don't have permission to edit the block below the note block!")
-                            it.gui.destroy()
-                            return@StaticGuiElement true
+                        setBlockBelowNoteBlock(player, block, icon).also { response ->
+                            if (!response) {
+                                return@StaticGuiElement true
+                            }
                         }
-                        blockBelow.setType(icon, true)
                         it.gui.destroy()
                         return@StaticGuiElement true
                     }
@@ -94,5 +89,50 @@ object NoteBlockInstrumentMenu {
             "§e§lL-CLICK §7to set",
             "§e§lR-CLICK §7to play preview"
         )
+    }
+
+    private fun createNoteBlocksPlusInstrumentButton(block: Block, note: Note, sound: String, icon: Material): StaticGuiElement {
+        val name = sound.replace("^[^:]+:".toRegex(), "")
+        val soundString = name.split(".", "_").joinToString(" ") { it.toLowerCase().capitalize() }
+
+        return StaticGuiElement(
+            'i',
+            ItemStack(icon),
+            {
+                val player = it.event.whoClicked as Player
+                when {
+                    it.event.isLeftClick -> {
+                        setBlockBelowNoteBlock(player, block, icon).also { response ->
+                            if (!response) return@StaticGuiElement true
+                        }
+                        it.gui.destroy()
+                        return@StaticGuiElement true
+                    }
+                    it.event.isRightClick -> {
+                        val pitch = NoteBlocksPlusAPI.getNotePitch(note.id.toFloat())
+                        player.playSound(player.location, sound, 1f, pitch)
+                        return@StaticGuiElement true
+                    }
+                    else -> return@StaticGuiElement true
+                }
+            },
+            "§6§l$soundString",
+            "§7Sets the note block",
+            "§7sound to $soundString",
+            "§0 ",
+            "§e§lL-CLICK §7to set",
+            "§e§lR-CLICK §7to play preview"
+        )
+    }
+
+    private fun setBlockBelowNoteBlock(player: Player, block: Block, material: Material) : Boolean {
+        val blockBelow = block.getRelative(BlockFace.DOWN)
+        if (!player.canPlace(blockBelow)) {
+            player.sendMessage("§cYou don't have permission to edit the block below the note block!")
+            player.playSound(player.location, Sound.ENTITY_VILLAGER_NO, 1f, 1f)
+            return false
+        }
+        blockBelow.setType(material, true)
+        return true
     }
 }

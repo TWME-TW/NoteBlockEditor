@@ -1,11 +1,12 @@
 main: com.itsazza.noteblockeditor.NoteBlockEditorPlugin
 name: NoteBlockEditor
-version: 1.1.1
+version: 1.2
 author: ItsAZZA
 api-version: "1.13"
+softdepend: ["NoteBlocksPlus"]
 commands:
   noteblock:
-    aliases: [noteblocks, nb, noteblockeditor, nbe]
+    aliases: [noteblockeditor, nbe]
 permissions:
   noteblockeditor.interact:
     description: "Access to the noteblock editor via interaction"
