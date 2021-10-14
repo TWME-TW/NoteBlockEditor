@@ -17,15 +17,16 @@ import org.bukkit.inventory.ItemStack
 
 @Suppress("DEPRECATION")
 object NoteBlockInstrumentMenu {
+    private val instance = NoteBlockEditorPlugin.instance
+
     fun openMenu(player: Player, block: Block, currentNote: Note, currentInstrument: Instrument) {
         createMenu(player, block, currentNote, currentInstrument).show(player)
     }
 
     private fun createMenu(player: Player, block: Block, currentNote: Note, currentInstrument: Instrument) : InventoryGui {
         val gui = InventoryGui(
-            NoteBlockEditorPlugin.instance,
-            null,
-            "Note Block Editor",
+            instance,
+            instance.getLangString("menu-title"),
             noteBlockMenuTemplate
         )
 
@@ -48,7 +49,7 @@ object NoteBlockInstrumentMenu {
             1,
             {   NoteBlockNoteMenu.openMenu(player, block, currentNote, currentInstrument)
                 return@StaticGuiElement true},
-            "§eBack"
+            instance.getLangString("button-back")
         ))
         gui.addElement(closeButton)
         gui.closeAction = InventoryGui.CloseAction { false }
@@ -82,12 +83,8 @@ object NoteBlockInstrumentMenu {
                     }
                 }
             },
-            "§6§l${instrumentName.capitalize()}",
-            "§7Sets the note block",
-            "§7instrument to $instrumentName",
-            "§0 ",
-            "§e§lL-CLICK §7to set",
-            "§e§lR-CLICK §7to play preview"
+            instance.getLangString("menu-instrument-change-title").format(instrumentName),
+            *instance.getLangString("menu-instrument-change-description").format(instrumentName).split('\n').toTypedArray()
         )
     }
 
@@ -116,19 +113,15 @@ object NoteBlockInstrumentMenu {
                     else -> return@StaticGuiElement true
                 }
             },
-            "§6§l$soundString",
-            "§7Sets the note block",
-            "§7sound to $soundString",
-            "§0 ",
-            "§e§lL-CLICK §7to set",
-            "§e§lR-CLICK §7to play preview"
+            instance.getLangString("menu-instrument-change-title").format(soundString),
+            *instance.getLangString("menu-instrument-change-description").format(soundString).split('\n').toTypedArray()
         )
     }
 
     private fun setBlockBelowNoteBlock(player: Player, block: Block, material: Material) : Boolean {
         val blockBelow = block.getRelative(BlockFace.DOWN)
         if (!player.canPlace(blockBelow)) {
-            player.sendMessage("§cYou don't have permission to edit the block below the note block!")
+            player.sendMessage(instance.getLangString("no-build-permission-below"))
             player.playSound(player.location, Sound.ENTITY_VILLAGER_NO, 1f, 1f)
             return false
         }

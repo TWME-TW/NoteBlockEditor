@@ -16,15 +16,16 @@ import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 
 object NoteBlockNoteMenu {
+    private val instance = NoteBlockEditorPlugin.instance
+
     fun openMenu(player: Player, block: Block, note: Note, instrument: Instrument) {
         createMenu(player, block, note, instrument).show(player)
     }
 
     private fun createMenu(player: Player, block: Block, note: Note, instrument: Instrument) : InventoryGui {
         val gui = InventoryGui(
-            NoteBlockEditorPlugin.instance,
-            null,
-            "Note Block Editor",
+            instance,
+            instance.getLangString("menu-title"),
             noteBlockMenuTemplate
         )
 
@@ -45,11 +46,7 @@ object NoteBlockNoteMenu {
                         NoteBlockInstrumentMenu.openMenu(player, block, note, instrument)
                         return@StaticGuiElement true
                     },
-                    "§6§lChange instrument",
-                    "§7Open a menu to change the",
-                    "§7noteblock's instrument",
-                    "§0 ",
-                    "§eClick to open"
+                    *instance.getLangString("button-instrument-menu").split('\n').toTypedArray()
                 )
             )
         }
@@ -58,16 +55,22 @@ object NoteBlockNoteMenu {
         return gui
     }
 
-    private fun createNoteBlockButton(block: Block, note: NoteBlockNote, instrument: Instrument, currentNote: Note) : StaticGuiElement {
+    private fun createNoteBlockButton(
+        block: Block,
+        note: NoteBlockNote,
+        instrument: Instrument,
+        currentNote: Note
+    ): StaticGuiElement {
         val item = ItemStack(Material.NOTE_BLOCK)
-        val itemMeta = item.itemMeta
+        val itemMeta = item.itemMeta!!
         if (Note(note.value - 1) == currentNote) {
             itemMeta.addEnchant(Enchantment.LOOT_BONUS_MOBS, 1, true)
             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
             item.itemMeta = itemMeta
         }
 
-        return StaticGuiElement('b',
+        return StaticGuiElement(
+            'b',
             item,
             note.value,
             GuiElement.Action {
@@ -84,7 +87,7 @@ object NoteBlockNoteMenu {
                         val data = block.blockData as NoteBlock
                         data.note = newNote
                         block.blockData = data
-                        player.sendMessage("§eNote set to ${note.name}")
+                        player.sendMessage(instance.getLangString("menu-note-change-message").format(note.name))
                         it.gui.destroy()
                         return@Action true
                     }
@@ -93,13 +96,8 @@ object NoteBlockNoteMenu {
                     }
                 }
             },
-            "§6§l${note.name}",
-            "§7Equals to note ${note.name}",
-            "§7or ${note.value - 1} clicks on",
-            "§7the noteblock",
-            "§0 ",
-            "§e§lL-CLICK §7to set",
-            "§e§lR-CLICK §7to play preview"
-            )
+            instance.getLangString("menu-note-change-title").format(note.name),
+            *instance.getLangString("menu-note-change-description").format(note.name, note.value - 1).split('\n').toTypedArray()
+        )
     }
 }

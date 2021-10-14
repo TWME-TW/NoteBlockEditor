@@ -31,6 +31,10 @@ class NoteBlockEditorPlugin : JavaPlugin() {
         Metrics(this, 11176)
     }
 
+    fun getLangString(path: String) : String {
+        return config.getString("messages.$path") ?: throw NullPointerException()
+    }
+
     fun loadInstruments() {
         instruments.clear()
 

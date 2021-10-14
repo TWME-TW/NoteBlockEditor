@@ -1,5 +1,6 @@
 package com.itsazza.noteblockeditor.listener
 
+import com.itsazza.noteblockeditor.NoteBlockEditorPlugin
 import com.itsazza.noteblockeditor.menu.notemenu.NoteBlockNoteMenu
 import com.itsazza.noteblockeditor.util.canPlace
 import org.bukkit.Material
@@ -25,7 +26,7 @@ object NoteBlockEventListener: Listener {
         val noteBlock = clickedBlock.blockData as NoteBlock
 
         if(!player.canPlace(clickedBlock) && !player.hasPermission("noteblockeditor.bypass")) {
-            player.sendMessage("§cYou're not allowed to build here!")
+            player.sendMessage(NoteBlockEditorPlugin.instance.getLangString("no-build-permission"))
             return
         }
 

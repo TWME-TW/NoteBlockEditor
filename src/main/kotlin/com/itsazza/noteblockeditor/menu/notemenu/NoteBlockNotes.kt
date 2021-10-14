@@ -1,6 +1,9 @@
 package com.itsazza.noteblockeditor.menu.notemenu
 
+import com.itsazza.noteblockeditor.NoteBlockEditorPlugin
+
 class NoteBlockNote(val name: String, val value: Int)
+val secondOctave = NoteBlockEditorPlugin.instance.getLangString("second-octave")
 
 val listOfNotes = listOf(
     NoteBlockNote("F♯/G♭", 1),
@@ -15,17 +18,17 @@ val listOfNotes = listOf(
     NoteBlockNote("D♯/E♭", 10),
     NoteBlockNote("E", 11),
     NoteBlockNote("F", 12),
-    NoteBlockNote("F♯/G♭ (2nd octave)", 13),
-    NoteBlockNote("G (2nd octave)", 14),
-    NoteBlockNote("G♯/A♭ (2nd octave)", 15),
-    NoteBlockNote("A (2nd octave)", 16),
-    NoteBlockNote("A♯/B♭ (2nd octave)", 17),
-    NoteBlockNote("B (2nd octave)", 18),
-    NoteBlockNote("C (2nd octave)", 19),
-    NoteBlockNote("C♯/D♭ (2nd octave)", 20),
-    NoteBlockNote("D (2nd octave)", 21),
-    NoteBlockNote("D♯/E♭ (2nd octave)", 22),
-    NoteBlockNote("E (2nd octave)", 23),
-    NoteBlockNote("F (2nd octave)", 24),
-    NoteBlockNote("F♯/G♭ (3rd octave)", 25)
+    NoteBlockNote("F♯/G♭ $secondOctave", 13),
+    NoteBlockNote("G $secondOctave", 14),
+    NoteBlockNote("G♯/A♭ $secondOctave", 15),
+    NoteBlockNote("A $secondOctave", 16),
+    NoteBlockNote("A♯/B♭ $secondOctave", 17),
+    NoteBlockNote("B $secondOctave", 18),
+    NoteBlockNote("C $secondOctave", 19),
+    NoteBlockNote("C♯/D♭ $secondOctave", 20),
+    NoteBlockNote("D $secondOctave", 21),
+    NoteBlockNote("D♯/E♭ $secondOctave", 22),
+    NoteBlockNote("E $secondOctave", 23),
+    NoteBlockNote("F $secondOctave", 24),
+    NoteBlockNote("F♯/G♭ $secondOctave", 25)
 )

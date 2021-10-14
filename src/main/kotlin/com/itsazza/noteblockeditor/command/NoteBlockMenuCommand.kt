@@ -10,38 +10,39 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
 object NoteBlockMenuCommand : CommandExecutor {
+    private val instance = NoteBlockEditorPlugin.instance
+
     override fun onCommand(sender: CommandSender, p1: Command, p2: String, args: Array<out String>): Boolean {
         if (sender !is Player) {
-            sender.sendMessage("§cThis command must be executed as a player!")
+            sender.sendMessage(instance.getLangString("not-a-player"))
             return true
         }
 
         if (args.isNotEmpty() && args[0].toLowerCase() == "reload") {
             if (!sender.hasPermission("noteblockeditor.reload")) {
-                sender.sendMessage("§cNo permission to reload!")
+                sender.sendMessage(instance.getLangString("config-reload-no-permission"))
                 return true
             }
 
-            val plugin = NoteBlockEditorPlugin.instance
-            plugin.reloadConfig()
-            plugin.loadInstruments()
-            sender.sendMessage("§eReloaded config!")
+            instance.reloadConfig()
+            instance.loadInstruments()
+            sender.sendMessage(instance.getLangString("config-reload"))
             return true
         }
 
         if (!sender.hasPermission("noteblockeditor.command")) {
-            sender.sendMessage("§cInsufficient permission: noteblockeditor.command")
+            sender.sendMessage(instance.getLangString("command-no-permission"))
             return true
         }
 
         val block = sender.getTargetBlockExact(15)
         if (block == null || block.blockData !is NoteBlock) {
-            sender.sendMessage("§cYou're not looking at a note block!")
+            sender.sendMessage(instance.getLangString("not-looking-at-noteblock"))
             return true
         }
 
         if(!sender.canPlace(block) && !sender.hasPermission("noteblockeditor.bypass")) {
-            sender.sendMessage("§cYou're not allowed to build here!")
+            sender.sendMessage(instance.getLangString("no-build-permission"))
             return true
         }
 
