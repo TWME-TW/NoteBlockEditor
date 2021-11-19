@@ -1,7 +1,8 @@
 package com.itsazza.noteblockeditor
 
-import com.itsazza.noteblockeditor.command.NoteBlockMenuCommand
+import com.itsazza.noteblockeditor.command.NoteBlockCommand
 import com.itsazza.noteblockeditor.listener.NoteBlockEventListener
+import com.itsazza.noteblockeditor.listener.NoteBlockPlaceListener
 import org.bstats.bukkit.Metrics
 import org.bukkit.Bukkit
 import org.bukkit.Instrument
@@ -24,10 +25,11 @@ class NoteBlockEditorPlugin : JavaPlugin() {
         instance = this
         noteBlocksPlusEnabled = Bukkit.getPluginManager().isPluginEnabled("NoteBlocksPlus")
 
-        getCommand("noteblock")?.setExecutor(NoteBlockMenuCommand)
+        getCommand("noteblock")?.setExecutor(NoteBlockCommand)
         saveDefaultConfig()
         loadInstruments()
         Bukkit.getPluginManager().registerEvents(NoteBlockEventListener, this)
+        Bukkit.getPluginManager().registerEvents(NoteBlockPlaceListener, this)
         Metrics(this, 11176)
     }
 

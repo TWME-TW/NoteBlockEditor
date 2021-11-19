@@ -35,3 +35,4 @@ messages:
     command-no-permission: "§cInsufficient permission: noteblockeditor.command"
     config-reload: "§eReloaded config!"
     config-reload-no-permission: "§cNo permission to reload!"
+    general-no-permission: "§cInsufficient permissions..."
