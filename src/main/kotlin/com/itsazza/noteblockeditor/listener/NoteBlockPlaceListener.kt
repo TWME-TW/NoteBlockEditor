@@ -14,10 +14,11 @@ object NoteBlockPlaceListener : Listener {
     fun onNoteBlockPlace(event: BlockPlaceEvent) {
         if (event.blockPlaced.blockData !is NoteBlock) return
         if (!event.itemInHand.hasItemMeta()) return
-        event.itemInHand.itemMeta!!.persistentDataContainer.get(NamespacedKey(NoteBlockEditorPlugin.instance, "noteblock"), PersistentDataType.INTEGER)
-            ?.let {
+        event.itemInHand.itemMeta!!.persistentDataContainer
+            .get(NamespacedKey(NoteBlockEditorPlugin.instance, "noteblock"), PersistentDataType.INTEGER)?.let {
                 val noteBlock = event.blockPlaced.blockData as NoteBlock
                 noteBlock.note = Note(it)
+                event.block.blockData = noteBlock
             }
     }
 }

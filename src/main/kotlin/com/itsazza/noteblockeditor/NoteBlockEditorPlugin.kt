@@ -8,8 +8,6 @@ import org.bukkit.Bukkit
 import org.bukkit.Instrument
 import org.bukkit.Material
 import org.bukkit.plugin.java.JavaPlugin
-import java.lang.IllegalArgumentException
-import kotlin.collections.HashMap
 import kotlin.properties.Delegates
 
 class NoteBlockEditorPlugin : JavaPlugin() {

@@ -1,10 +1,13 @@
 package com.itsazza.noteblockeditor.menu.notemenu
 
 import com.itsazza.noteblockeditor.NoteBlockEditorPlugin
-import de.themoep.inventorygui.*
 import com.itsazza.noteblockeditor.menu.buttons.closeButton
 import com.itsazza.noteblockeditor.menu.instrumentmenu.NoteBlockInstrumentMenu
 import com.itsazza.noteblockeditor.menu.noteBlockMenuTemplate
+import de.themoep.inventorygui.GuiElement
+import de.themoep.inventorygui.GuiElementGroup
+import de.themoep.inventorygui.InventoryGui
+import de.themoep.inventorygui.StaticGuiElement
 import org.bukkit.Instrument
 import org.bukkit.Material
 import org.bukkit.Note

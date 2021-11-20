@@ -9,7 +9,10 @@ import com.itsazza.noteblocksplus.api.NoteBlocksPlusAPI
 import de.themoep.inventorygui.GuiElementGroup
 import de.themoep.inventorygui.InventoryGui
 import de.themoep.inventorygui.StaticGuiElement
-import org.bukkit.*
+import org.bukkit.Instrument
+import org.bukkit.Material
+import org.bukkit.Note
+import org.bukkit.Sound
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
@@ -23,7 +26,12 @@ object NoteBlockInstrumentMenu {
         createMenu(player, block, currentNote, currentInstrument).show(player)
     }
 
-    private fun createMenu(player: Player, block: Block, currentNote: Note, currentInstrument: Instrument) : InventoryGui {
+    private fun createMenu(
+        player: Player,
+        block: Block,
+        currentNote: Note,
+        currentInstrument: Instrument
+    ): InventoryGui {
         val gui = InventoryGui(
             instance,
             instance.getLangString("menu-title"),
@@ -44,23 +52,34 @@ object NoteBlockInstrumentMenu {
         }
 
         gui.addElement(group)
-        gui.addElement(StaticGuiElement('r',
-            ItemStack(Material.ARROW),
-            1,
-            {   NoteBlockNoteMenu.openMenu(player, block, currentNote, currentInstrument)
-                return@StaticGuiElement true},
-            instance.getLangString("button-back")
-        ))
+        gui.addElement(
+            StaticGuiElement(
+                'r',
+                ItemStack(Material.ARROW),
+                1,
+                {
+                    NoteBlockNoteMenu.openMenu(player, block, currentNote, currentInstrument)
+                    return@StaticGuiElement true
+                },
+                instance.getLangString("button-back")
+            )
+        )
         gui.addElement(closeButton)
         gui.closeAction = InventoryGui.CloseAction { false }
         return gui
     }
 
-    private fun createInstrumentButton(block: Block, note: Note, newInstrument: Instrument, icon: Material) : StaticGuiElement {
+    private fun createInstrumentButton(
+        block: Block,
+        note: Note,
+        newInstrument: Instrument,
+        icon: Material
+    ): StaticGuiElement {
         val item = ItemStack(icon)
         val instrumentName = newInstrument.name.split("_").joinToString(" ") { it.toLowerCase().capitalize() }
 
-        return StaticGuiElement('i',
+        return StaticGuiElement(
+            'i',
             item,
             {
                 val player = it.event.whoClicked as Player
@@ -76,7 +95,7 @@ object NoteBlockInstrumentMenu {
                     }
                     it.event.isRightClick -> {
                         player.playNote(player.location, newInstrument, note)
-                        return@StaticGuiElement  true
+                        return@StaticGuiElement true
                     }
                     else -> {
                         return@StaticGuiElement true
@@ -84,11 +103,17 @@ object NoteBlockInstrumentMenu {
                 }
             },
             instance.getLangString("menu-instrument-change-title").format(instrumentName),
-            *instance.getLangString("menu-instrument-change-description").format(instrumentName).split('\n').toTypedArray()
+            *instance.getLangString("menu-instrument-change-description").format(instrumentName).split('\n')
+                .toTypedArray()
         )
     }
 
-    private fun createNoteBlocksPlusInstrumentButton(block: Block, note: Note, sound: String, icon: Material): StaticGuiElement {
+    private fun createNoteBlocksPlusInstrumentButton(
+        block: Block,
+        note: Note,
+        sound: String,
+        icon: Material
+    ): StaticGuiElement {
         val name = sound.replace("^[^:]+:".toRegex(), "")
         val soundString = name.split(".", "_").joinToString(" ") { it.toLowerCase().capitalize() }
 
@@ -118,7 +143,7 @@ object NoteBlockInstrumentMenu {
         )
     }
 
-    private fun setBlockBelowNoteBlock(player: Player, block: Block, material: Material) : Boolean {
+    private fun setBlockBelowNoteBlock(player: Player, block: Block, material: Material): Boolean {
         val blockBelow = block.getRelative(BlockFace.DOWN)
         if (!player.canPlace(blockBelow)) {
             player.sendMessage(instance.getLangString("no-build-permission-below"))

@@ -1,17 +1,16 @@
 package com.itsazza.noteblockeditor.command
 
 import com.itsazza.noteblockeditor.NoteBlockEditorPlugin
+import com.itsazza.noteblockeditor.menu.blockmenu.BlockMenu
 import com.itsazza.noteblockeditor.menu.notemenu.NoteBlockNoteMenu
 import com.itsazza.noteblockeditor.util.canPlace
-import org.bukkit.Material
-import org.bukkit.NamespacedKey
+import com.itsazza.noteblockeditor.util.giveNoteBlock
+import org.bukkit.Bukkit
 import org.bukkit.block.data.type.NoteBlock
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemStack
-import org.bukkit.persistence.PersistentDataType
 
 object NoteBlockCommand : CommandExecutor {
     private val instance = NoteBlockEditorPlugin.instance
@@ -32,22 +31,44 @@ object NoteBlockCommand : CommandExecutor {
                     reload(sender)
                     return true
                 }
-                "get" -> {
-                    if(!sender.hasPermission("noteblockeditor.give")) {
+                "give" -> {
+                    if (!sender.hasPermission("noteblockeditor.give")) {
                         sender.sendMessage(instance.getLangString("general-no-permission"))
                         return true
                     }
 
-                    if (args.size < 2) {
-                        sender.sendMessage("Oops!")
-                        return true
+                    when (args.size) {
+                        1 -> {
+                            BlockMenu.open(sender)
+                            return true
+                        }
+                        2 -> {
+                            val level = args[1].toIntOrNull() ?: return true
+                            if (level !in 1..25) return true
+                            giveNoteBlock(sender, level)
+                            sender.sendMessage("§eGave pre-set noteblock!")
+                            return true
+                        }
+                        3 -> {
+                            val level = args[1].toIntOrNull()
+                            if (level == null || level !in 1..25) {
+                                sender.sendMessage("§cInvalid level! Must be a value between 1-25")
+                                return true
+                            }
+                            val player = Bukkit.getPlayer(args[2])
+                            if (player == null) {
+                                sender.sendMessage("§cPlayer not found!")
+                                return true
+                            }
+                            giveNoteBlock(player, level)
+                            player.sendMessage("§eReceived pre-set noteblock!")
+                            return true
+                        }
+                        else -> {
+                            sender.sendMessage(instance.getLangString("command-give-usage"))
+                            return true
+                        }
                     }
-
-                    val level = args[1].toIntOrNull() ?: return true
-                    if (level !in 0..24) return true
-
-                    giveNoteBlock(sender, level)
-                    return true
                 }
             }
         }
@@ -63,7 +84,7 @@ object NoteBlockCommand : CommandExecutor {
             return true
         }
 
-        if(!sender.canPlace(block) && !sender.hasPermission("noteblockeditor.bypass")) {
+        if (!sender.canPlace(block) && !sender.hasPermission("noteblockeditor.bypass")) {
             sender.sendMessage(instance.getLangString("no-build-permission"))
             return true
         }
@@ -77,15 +98,5 @@ object NoteBlockCommand : CommandExecutor {
         instance.reloadConfig()
         instance.loadInstruments()
         player.sendMessage(instance.getLangString("config-reload"))
-    }
-
-    private fun giveNoteBlock(player: Player, value: Int) {
-        val block = ItemStack(Material.NOTE_BLOCK, 64)
-        val itemMeta = block.itemMeta!!
-        itemMeta.persistentDataContainer.set(NamespacedKey(instance, "noteblock"), PersistentDataType.INTEGER, value)
-        itemMeta.lore = listOf("§7Value: §2$value", "§ePlace to set as this level!")
-        block.itemMeta = itemMeta
-        player.inventory.addItem(block)
-        player.sendMessage("Gave pre-set noteblock!")
     }
 }
