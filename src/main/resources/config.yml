@@ -40,6 +40,7 @@ messages:
     set-note-not-number: "§cInvalid note! Must be a number between 0-24"
     set-note-usage: "§cUsage: /noteblock sethand <note>"
     set-note-set: "§eNote block set to %s"
+    set-note-not-holding: "§cYou're not holding a note block!"
     command-no-permission: "§cInsufficient permission: noteblockeditor.command"
     config-reload: "§eReloaded config!"
     config-reload-no-permission: "§cNo permission to reload!"

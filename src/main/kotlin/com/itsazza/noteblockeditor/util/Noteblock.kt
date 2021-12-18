@@ -25,6 +25,10 @@ object Noteblock {
 
     fun setBlocksInHand(player: Player, value: Int) {
         val item = player.inventory.itemInMainHand
+        if (item.type != Material.NOTE_BLOCK) {
+            player.sendMessage(instance.getLangString("set-note-not-holding"))
+            return
+        }
         val itemMeta = item.itemMeta!!
         itemMeta.persistentDataContainer.set(
             NamespacedKey(NoteBlockEditorPlugin.instance, "noteblock"),
