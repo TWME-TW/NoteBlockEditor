@@ -4,7 +4,7 @@ import com.itsazza.noteblockeditor.NoteBlockEditorPlugin
 import com.itsazza.noteblockeditor.menu.buttons.closeButton
 import com.itsazza.noteblockeditor.menu.notemenu.NoteBlockNote
 import com.itsazza.noteblockeditor.menu.notemenu.listOfNotes
-import com.itsazza.noteblockeditor.util.giveNoteBlock
+import com.itsazza.noteblockeditor.util.Noteblock
 import de.themoep.inventorygui.GuiElementGroup
 import de.themoep.inventorygui.InventoryGui
 import de.themoep.inventorygui.StaticGuiElement
@@ -50,7 +50,7 @@ object BlockMenu {
             ItemStack(Material.NOTE_BLOCK, note.value),
             {
                 val player = it.event.whoClicked as Player
-                giveNoteBlock(player, note.value)
+                Noteblock.giveBlock(player, note.value)
                 player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_BIT, 1f, 1f)
                 return@StaticGuiElement true
             },

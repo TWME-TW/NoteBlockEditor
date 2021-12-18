@@ -3,8 +3,8 @@ package com.itsazza.noteblockeditor.command
 import com.itsazza.noteblockeditor.NoteBlockEditorPlugin
 import com.itsazza.noteblockeditor.menu.blockmenu.BlockMenu
 import com.itsazza.noteblockeditor.menu.notemenu.NoteBlockNoteMenu
+import com.itsazza.noteblockeditor.util.Noteblock
 import com.itsazza.noteblockeditor.util.canPlace
-import com.itsazza.noteblockeditor.util.giveNoteBlock
 import org.bukkit.Bukkit
 import org.bukkit.block.data.type.NoteBlock
 import org.bukkit.command.Command
@@ -31,6 +31,27 @@ object NoteBlockCommand : CommandExecutor {
                     reload(sender)
                     return true
                 }
+                "sethand" -> {
+                    if (!sender.hasPermission("noteblockeditor.sethand")) {
+                        sender.sendMessage(instance.getLangString("general-no-permission"))
+                        return true
+                    }
+
+                    if (args.size < 2) {
+                        sender.sendMessage(instance.getLangString("set-note-usage"))
+                        return true
+                    }
+
+                    val value = args[1].toIntOrNull()
+                    if (value == null) {
+                        sender.sendMessage(instance.getLangString("set-note-not-number"))
+                        return true
+                    }
+
+                    Noteblock.setBlocksInHand(sender, value)
+                    sender.sendMessage(instance.getLangString("set-note-set").format(value))
+                    return true
+                }
                 "give" -> {
                     if (!sender.hasPermission("noteblockeditor.give")) {
                         sender.sendMessage(instance.getLangString("general-no-permission"))
@@ -45,7 +66,7 @@ object NoteBlockCommand : CommandExecutor {
                         2 -> {
                             val level = args[1].toIntOrNull() ?: return true
                             if (level !in 1..25) return true
-                            giveNoteBlock(sender, level)
+                            Noteblock.giveBlock(sender, level)
                             sender.sendMessage(instance.getLangString("received-note-block"))
                             return true
                         }
@@ -60,7 +81,7 @@ object NoteBlockCommand : CommandExecutor {
                                 sender.sendMessage(instance.getLangString("player-not-found"))
                                 return true
                             }
-                            giveNoteBlock(player, level)
+                            Noteblock.giveBlock(player, level)
                             player.sendMessage(instance.getLangString("received-note-block"))
                             return true
                         }
