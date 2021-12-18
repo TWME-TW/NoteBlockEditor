@@ -22,7 +22,7 @@ object NoteBlockCommand : CommandExecutor {
         }
 
         if (args.isNotEmpty()) {
-            when (args[0].toLowerCase()) {
+            when (args[0].lowercase()) {
                 "reload" -> {
                     if (!sender.hasPermission("noteblockeditor.reload")) {
                         sender.sendMessage(instance.getLangString("config-reload-no-permission"))
@@ -46,22 +46,22 @@ object NoteBlockCommand : CommandExecutor {
                             val level = args[1].toIntOrNull() ?: return true
                             if (level !in 1..25) return true
                             giveNoteBlock(sender, level)
-                            sender.sendMessage("§eGave pre-set noteblock!")
+                            sender.sendMessage(instance.getLangString("received-note-block"))
                             return true
                         }
                         3 -> {
                             val level = args[1].toIntOrNull()
                             if (level == null || level !in 1..25) {
-                                sender.sendMessage("§cInvalid level! Must be a value between 1-25")
+                                sender.sendMessage(instance.getLangString("invalid-level"))
                                 return true
                             }
                             val player = Bukkit.getPlayer(args[2])
                             if (player == null) {
-                                sender.sendMessage("§cPlayer not found!")
+                                sender.sendMessage(instance.getLangString("player-not-found"))
                                 return true
                             }
                             giveNoteBlock(player, level)
-                            player.sendMessage("§eReceived pre-set noteblock!")
+                            player.sendMessage(instance.getLangString("received-note-block"))
                             return true
                         }
                         else -> {

@@ -54,11 +54,7 @@ object BlockMenu {
                 player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_BIT, 1f, 1f)
                 return@StaticGuiElement true
             },
-            "§6§lNote Block",
-            "§7A note block with ${note.value}",
-            "§7clicks pre set",
-            "§0 ",
-            "§eClick to get!"
+            instance.getLangString("menu-give-description").format(note.value)
         )
     }
 }

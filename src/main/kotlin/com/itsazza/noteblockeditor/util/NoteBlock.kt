@@ -15,7 +15,7 @@ fun giveNoteBlock(player: Player, value: Int) {
         PersistentDataType.INTEGER,
         value - 1
     )
-    itemMeta.setDisplayName("§fNote Block ($value clicks)")
+    itemMeta.setDisplayName(NoteBlockEditorPlugin.instance.getLangString("pre-set-note-block-name").format(value))
     block.itemMeta = itemMeta
     player.inventory.addItem(block)
 }

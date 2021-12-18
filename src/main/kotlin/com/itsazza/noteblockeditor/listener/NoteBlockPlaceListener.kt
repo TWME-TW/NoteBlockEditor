@@ -14,6 +14,7 @@ object NoteBlockPlaceListener : Listener {
     fun onNoteBlockPlace(event: BlockPlaceEvent) {
         if (event.blockPlaced.blockData !is NoteBlock) return
         if (!event.itemInHand.hasItemMeta()) return
+        if (!event.player.hasPermission("noteblockeditor.place")) return
         event.itemInHand.itemMeta!!.persistentDataContainer
             .get(NamespacedKey(NoteBlockEditorPlugin.instance, "noteblock"), PersistentDataType.INTEGER)?.let {
                 val noteBlock = event.blockPlaced.blockData as NoteBlock

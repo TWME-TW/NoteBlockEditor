@@ -1,6 +1,6 @@
 main: com.itsazza.noteblockeditor.NoteBlockEditorPlugin
 name: NoteBlockEditor
-version: 1.3
+version: 1.4.0
 author: ItsAZZA
 api-version: "1.13"
 softdepend: ["NoteBlocksPlus"]
@@ -16,6 +16,10 @@ permissions:
     description: "Ability to reload configuration"
   noteblockeditor.bypass:
     description: "Bypass any build restrictions: able to edit noteblocks anywhere"
+  noteblockeditor.give:
+    description: "Ability to get and give pre-set noteblocks"
+  noteblockeditor.place:
+    description: "Ability to place noteblocks with pre-set values"
   noteblockeditor.instruments:
     default: true
     description: "Access to the noteblock editor instrument menu"
